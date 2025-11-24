@@ -20,21 +20,20 @@ permissions:
 jobs:
   build_project:
     runs-on: ubuntu-latest
-    container: 
-      image: ghcr.io/xu-cheng/texlive-debian:20251002
+    container: ghcr.io/xu-cheng/texlive-debian:20251002
     name: Build project
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
       - name: Install packages
         run: |
           apt update
           apt install -y nodejs make git pkg-config graphviz libgraphviz-dev gcc musl-dev python3-dev
           git config --global --add safe.directory $GITHUB_WORKSPACE
           git config --global --add safe.directory `pwd`
-
-      - name: Checkout project
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Install elan
         run: curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
@@ -64,7 +63,7 @@ jobs:
           mkdir -p home_page
           cp blueprint/print/print.pdf home_page/blueprint.pdf
           uvx leanblueprint web
-          cp -r blueprint/web home_page/blueprint
+          cp -r blueprint/web home_page
 
       - name: Check declarations mentioned in the blueprint exist in Lean code
         run: |
