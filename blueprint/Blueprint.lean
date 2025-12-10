@@ -31,11 +31,11 @@ authors := ["Lua Viana Reis"]
 %%%
 
 {index}[example]
-This project aims to build up the theory of measure-theoretic entropy up to its relations to the notion of topological entropy, manifested as the variational principle:
+This project aims to build the theory of measure-theoretic entropy up to its relations to topological entropy, manifested as the variational principle:
 
 $$`h_{\mathrm{top}}(f) = \sup_{\mu \in \mathcal{M}_f(X)}h_{\mu}(f)`
 
-# Lean Code
+# Conditional measures
 
 The tools in this section come from the Verso namespace `Verso.Genre.Manual.InlineLean`.
 
@@ -52,7 +52,7 @@ Use the {lean}`leanSection` directive to create a Lean section that delimits sco
 The {lean}`lean` role allows Lean terms to be included as inline elements in paragraphs.
 Use {lean}`name` to refer to a name that can't be easily elaborated as a term, e.g. due to implicit parameters or type classes.
 
-## Saved Lean Code
+## Conditional information
 
 The tools in this section come from the Verso namespace `DemoTextbook` in the module `DemoTextbook.Meta.Lean`.
 
