@@ -5,11 +5,11 @@ Author: David Thrane Christiansen
 -/
 
 import VersoManual
-import DemoTextbook.Meta.Lean
-import DemoTextbook.Papers
+import Blueprint.Meta.Lean
+import Blueprint.Papers
 
 -- This is a chapter that's included
-import DemoTextbook.Nat
+import Blueprint.Nat
 
 -- This gets access to most of the manual genre (which is also useful for textbooks)
 open Verso.Genre Manual
@@ -19,7 +19,7 @@ open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 
 
-open DemoTextbook
+open Blueprint
 
 set_option pp.rawOnError true
 
@@ -34,6 +34,8 @@ authors := ["Lua Viana Reis"]
 This project aims to build the theory of measure-theoretic entropy up to its relations to topological entropy, manifested as the variational principle:
 
 $$`h_{\mathrm{top}}(f) = \sup_{\mu \in \mathcal{M}_f(X)}h_{\mu}(f)`
+
+Test citation: {citet einsiedlerWardEntropy}[].
 
 # Conditional measures
 
@@ -85,7 +87,7 @@ Expected error messages must be indicated explicitly:
 Unknown identifier `y`
 ```
 
-{include 1 DemoTextbook.Nat}
+{include 1 Blueprint.Nat}
 
 # Notes
 
