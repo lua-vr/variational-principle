@@ -1,0 +1,14 @@
+name = "blueprint"
+defaultTargets = ["Blueprint", "blueprint"]
+
+[[require]]
+name = "verso"
+git = "https://github.com/leanprover/verso"
+rev = "v4.24.0"
+
+[[lean_lib]]
+name = "Blueprint"
+
+[[lean_exe]]
+name = "blueprint"
+root = "BlueprintMain"

@@ -31,7 +31,7 @@ jobs:
       - name: Install packages
         run: |
           apt update
-          apt install -y nodejs make git pkg-config graphviz libgraphviz-dev gcc musl-dev python3-dev
+          apt install -y make git graphviz
           git config --global --add safe.directory $GITHUB_WORKSPACE
           git config --global --add safe.directory `pwd`
 
@@ -45,6 +45,13 @@ jobs:
             .lake
           key: cache-${{ hashFiles('lake-manifest.json') }}
 
+      - name: Cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            blueprint/.lake
+          key: blueprint-cache-${{ hashFiles('lake-manifest.json') }}
+
       - name: Get Mathlib cache
         run: ~/.elan/bin/lake exe cache get || true
 
@@ -54,20 +61,16 @@ jobs:
       - name: Build project API documentation
         run: ~/.elan/bin/lake -R -Kenv=dev build VariationalPrinciple:docs
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-
       - name: Build blueprint and copy to `home_page/blueprint`
         run: |
-          uvx leanblueprint pdf
-          mkdir -p home_page
-          cp blueprint/print/print.pdf home_page/blueprint.pdf
-          uvx leanblueprint web
-          cp -r blueprint/web home_page
+          cd blueprint
+          lake exe blueprint
+          cp -r _out/html-multi ../home_page
+          cd ..
 
-      - name: Check declarations mentioned in the blueprint exist in Lean code
-        run: |
-          ~/.elan/bin/lake exe checkdecls blueprint/lean_decls
+      # - name: Check declarations mentioned in the blueprint exist in Lean code
+      #   run: |
+      #     ~/.elan/bin/lake exe checkdecls blueprint/lean_decls
 
       - name: Copy API documentation to `home_page/docs`
         run: |
@@ -96,4 +99,12 @@ jobs:
           path: |
             .lake
           key: cache-${{ hashFiles('lake-manifest.json') }}
+        if: ${{ always() }}
+
+      - name: Save cache
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            blueprint/.lake
+          key: blueprint-cache-${{ hashFiles('lake-manifest.json') }}
         if: ${{ always() }}
