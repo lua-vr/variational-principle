@@ -31,55 +31,55 @@ jobs:
       - name: Install packages
         run: |
           apt update
-          apt install -y make git graphviz
+          apt install -y nodejs make git pkg-config graphviz libgraphviz-dev gcc musl-dev python3-dev
           git config --global --add safe.directory $GITHUB_WORKSPACE
           git config --global --add safe.directory `pwd`
 
       - name: Install elan
         run: curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
 
-      - name: Cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            .lake
-          key: cache-${{ hashFiles('lake-manifest.json') }}
+      # - name: Cache
+      #   uses: actions/cache/restore@v4
+      #   with:
+      #     path: |
+      #       .lake
+      #     key: cache-${{ hashFiles('lake-manifest.json') }}
 
       - name: Cache
         uses: actions/cache/restore@v4
         with:
           path: |
             blueprint/.lake
-          key: blueprint-cache-${{ hashFiles('lake-manifest.json') }}
+          key: blueprint-cache-${{ hashFiles('blueprint/lake-manifest.json') }}
 
-      - name: Get Mathlib cache
-        run: ~/.elan/bin/lake exe cache get || true
+      # - name: Get Mathlib cache
+      #   run: ~/.elan/bin/lake exe cache get || true
 
-      - name: Build project
-        run: ~/.elan/bin/lake build VariationalPrinciple
+      # - name: Build project
+      #   run: ~/.elan/bin/lake build VariationalPrinciple
 
-      - name: Build project API documentation
-        run: ~/.elan/bin/lake -R -Kenv=dev build VariationalPrinciple:docs
+      # - name: Build project API documentation
+      #   run: ~/.elan/bin/lake -R -Kenv=dev build VariationalPrinciple:docs
 
       - name: Build blueprint and copy to `home_page/blueprint`
         run: |
           cd blueprint
-          lake exe blueprint
-          cp -r _out/html-multi ../home_page
+          ~/.elan/bin/lake exe blueprint
+          mv _out/html-multi ../home_page
           cd ..
 
       # - name: Check declarations mentioned in the blueprint exist in Lean code
       #   run: |
       #     ~/.elan/bin/lake exe checkdecls blueprint/lean_decls
 
-      - name: Copy API documentation to `home_page/docs`
-        run: |
-          cp -r .lake/build/doc home_page/docs
+      # - name: Copy API documentation to `home_page/docs`
+      #   run: |
+      #     mv .lake/build/doc home_page/docs
 
-      - name: Remove unnecessary lake files from documentation in `home_page/docs`
-        run: |
-          find home_page/docs -name "*.trace" -delete
-          find home_page/docs -name "*.hash" -delete
+      # - name: Remove unnecessary lake files from documentation in `home_page/docs`
+      #   run: |
+      #     find home_page/docs -name "*.trace" -delete
+      #     find home_page/docs -name "*.hash" -delete
 
       - name: "Upload website (API documentation, blueprint and any home page)"
         uses: actions/upload-pages-artifact@v3
@@ -90,21 +90,21 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Make sure the API documentation cache works
-        run: mv home_page/docs .lake/build/doc
+      # - name: Make sure the API documentation cache works
+      #   run: mv home_page/docs .lake/build/doc
 
-      - name: Save cache
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            .lake
-          key: cache-${{ hashFiles('lake-manifest.json') }}
-        if: ${{ always() }}
+      # - name: Save cache
+      #   uses: actions/cache/save@v4
+      #   with:
+      #     path: |
+      #       .lake
+      #     key: cache-${{ hashFiles('lake-manifest.json') }}
+      #   if: ${{ always() }}
 
       - name: Save cache
         uses: actions/cache/save@v4
         with:
           path: |
             blueprint/.lake
-          key: blueprint-cache-${{ hashFiles('lake-manifest.json') }}
+          key: blueprint-cache-${{ hashFiles('blueprint/lake-manifest.json') }}
         if: ${{ always() }}
