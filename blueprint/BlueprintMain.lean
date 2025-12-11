@@ -80,11 +80,39 @@ where
     | .para .. | .code .. => pure ()
 
 
+def theoremCss : String := "\
+.theorem {
+  border-radius: 7px;
+  /* border: 1px solid #ccc; */
+  padding: 0px 15px;
+  margin: 15px 0px;
+  font-style: italic;
+  font-size: 0.97rem;
+}
+
+.theorem em {
+  font-weight: 500;
+  font-style: normal;
+}
+
+.theorem-name {
+  font-family: var(--verso-text-font-family);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.theorem > p:first-of-type {
+  display: inline;
+}
+"
+
 def config : Config where
+  extraCss := [theoremCss]
   emitTeX := false
   emitHtmlSingle := false
   emitHtmlMulti := true
-  htmlDepth := 2
+  htmlDepth := 1
+  rootTocDepth := .some 2
 
 def main :=
   manualMain
