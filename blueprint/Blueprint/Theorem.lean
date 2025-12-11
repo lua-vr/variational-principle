@@ -1,8 +1,7 @@
 import VersoManual
 
-open Verso Doc Genre Manual Elab
+open Verso Doc Genre Manual Elab Lean
 
-open Lean in
 structure TheoremConfig where
   name : Option String
   label : Option Name
@@ -36,7 +35,6 @@ def theoremCss := r###"
   }
   "###
 
-open Lean in
 block_extension Block.theorem (cfg : TheoremConfig) where
   data := ToJson.toJson cfg
   traverse := fun _ _ _ => pure none
@@ -62,7 +60,6 @@ block_extension Block.theorem (cfg : TheoremConfig) where
         </div>
       }}
 
-open Lean Elab in
 @[directive]
 def thm : DirectiveExpanderOf TheoremConfig
   | cfg, stxs => do
